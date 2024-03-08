@@ -35,6 +35,10 @@
             @Html.DisplayFor(model => model.Extension)
         </dd>
     </dl>
+    @if (Model.Extension.Contains("image"))
+    {
+        <img src="@Model.Path" alt="@Model.Name" />
+    }
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |

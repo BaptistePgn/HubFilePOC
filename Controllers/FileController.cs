@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HubFile.Data;
 using HubFile.Models;
+using HubFile.FileUploadService;
 
 namespace HubFile.Controllers
 {
     public class FileController : Controller
     {
         private readonly HubFileContext _context;
+        private readonly IFileUploadService _fileUploadService;
 
-        public FileController(HubFileContext context)
+        public FileController(HubFileContext context, IFileUploadService fileUploadService)
         {
             _context = context;
+            _fileUploadService = fileUploadService;
         }
 
         // GET: File
@@ -43,10 +46,30 @@ namespace HubFile.Controllers
             return View(fileModel);
         }
 
-        // GET: File/Create
-        public IActionResult Create()
+        // GET: File/Upload
+        public IActionResult Upload()
         {
             return View();
+        }
+
+        // GET: File/Create
+        public async Task<IActionResult> Create(IFormFile file)
+        {
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+            var filePath = await _fileUploadService.UploadFileAsync(file);
+
+            var fileModel = new FileModel
+            {
+                Name = file.FileName,
+                Path = filePath,
+                Size = file.Length.ToString(),
+                Extension = file.ContentType
+            };
+
+            return View(fileModel);
         }
 
         // POST: File/Create
@@ -54,16 +77,16 @@ namespace HubFile.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Path,Size,Extension")] FileModel fileModel)
+        public IActionResult Save([Bind("Id,Name,Path,Size,Extension")] FileModel fileModel)
         {
             if (ModelState.IsValid)
             {
                 fileModel.Id = Guid.NewGuid();
                 _context.Add(fileModel);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            return View(fileModel);
+            return RedirectToAction(nameof(Create));
         }
 
         // GET: File/Edit/5
@@ -143,6 +166,7 @@ namespace HubFile.Controllers
             var fileModel = await _context.FileModel.FindAsync(id);
             if (fileModel != null)
             {
+                _fileUploadService.DeleteFile(fileModel.Path);
                 _context.FileModel.Remove(fileModel);
             }
 

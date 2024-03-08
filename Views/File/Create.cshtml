@@ -10,26 +10,26 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Save">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" value="@Model.Name"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Path" class="control-label"></label>
-                <input asp-for="Path" class="form-control" />
+                <input asp-for="Path" class="form-control" value="@Model.Path" readonly />
                 <span asp-validation-for="Path" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Size" class="control-label"></label>
-                <input asp-for="Size" class="form-control" />
+                <input asp-for="Size" class="form-control" value="@Model.Size" readonly/>
                 <span asp-validation-for="Size" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Extension" class="control-label"></label>
-                <input asp-for="Extension" class="form-control" />
+                <input asp-for="Extension" class="form-control" value="@Model.Extension" readonly />
                 <span asp-validation-for="Extension" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -1,12 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using HubFile.Data;
+using HubFile.FileUploadService;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<HubFileContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HubFileContext") ?? throw new InvalidOperationException("Connection string 'HubFileContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IFileUploadService, LocalFileUploadService>();
 
 var app = builder.Build();
 

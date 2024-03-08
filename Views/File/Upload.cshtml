@@ -1,0 +1,20 @@
+﻿@*
+   upload file
+*@
+@{
+    ViewData["Title"] = "Upload";
+}
+
+<h1>Create</h1>
+
+<div class="mb-3 mt-3">
+    <form method="post" enctype="multipart/form-data" asp-action="Create">
+        <div>
+            <label class="form-label">Upload File</label>
+            <input type="file" name="file" class="form-control" />
+        </div>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </form>
+</div>
