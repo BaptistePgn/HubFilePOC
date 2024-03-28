@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # Others
 /appsettings.json
 wwwroot/uploads/*
+wwwroot/lib/*

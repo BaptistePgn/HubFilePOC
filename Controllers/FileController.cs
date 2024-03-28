@@ -48,39 +48,33 @@ namespace HubFile.Controllers
         }
 
         // GET: File/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormFile file)
         {
-            ArgumentNullException.ThrowIfNull(file);
+            if (file == null || file.Length == 0)
+            {
+                ModelState.AddModelError(string.Empty, "Please select a file to upload.");
+                return View();
+            }
+
             var filePath = await _fileUploadService.UploadFileAsync(file);
 
             var fileModel = new FileModel
             {
+                Id = Guid.NewGuid(),
                 Name = file.FileName,
                 Path = filePath,
                 Size = file.Length.ToString(),
-                Extension = file.ContentType
+                Extension = Path.GetExtension(file.FileName)
             };
 
-            return View(fileModel);
-        }
+            _context.Add(fileModel);
+            await _context.SaveChangesAsync();
 
-        // POST: File/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Save([Bind("Id,Name,Path,Size,Extension")] FileModel fileModel)
-        {
-            if (ModelState.IsValid)
-            {
-                fileModel.Id = Guid.NewGuid();
-                _context.Add(fileModel);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            return RedirectToAction(nameof(Create));
+            // Return json object to indicate success and redirect to index page
+            return Json(new { redirectUrl = Url.Action("Index") });
         }
-
         // GET: File/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {

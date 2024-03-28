@@ -7,14 +7,32 @@
 
 <h1>Create</h1>
 
-<div class="mb-3 mt-3">
-    <form method="post" enctype="multipart/form-data" asp-action="Create">
-        <div>
-            <label class="form-label">Upload File</label>
-            <input type="file" name="file" class="form-control" />
-        </div>
-        <div class="mt-3">
-            <button type="submit" class="btn btn-primary">Upload</button>
-        </div>
-    </form>
-</div>
+<form id="my-dropzone" class="dropzone" enctype="multipart/form-data" asp-action="Create" method="post">
+    <div class="fallback">
+        <input name="file" type="file" multiple />
+    </div>
+    <div class="dz-message" data-dz-message>
+        <span>Drop files here or click to upload.</span>
+    </div>
+</form>
+
+@section scripts {
+    <script src="~/lib/dropzone/min/dropzone.min.js"></script>
+    <script>
+        Dropzone.options.myDropzone = {
+            autoProcessQueue: true, // Envoyer les fichiers immédiatement après les avoir ajoutés
+            uploadMultiple: false, // Vous pouvez modifier cette option selon vos besoins
+            parallelUploads: 1, // Limite le nombre de fichiers à uploader en même temps
+            maxFiles: 1, // Limite le nombre de fichiers à uploader
+            init: function () {
+                this.on("success", function (file, response) {
+                    window.location.href = response.redirectUrl; // Rediriger vers une autre page après l'upload
+                });
+            }
+        };
+    </script>
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/lib/dropzone/min/dropzone.min.css" />
+}
