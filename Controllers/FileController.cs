@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using HubFile.Data;
-using HubFile.Models;
+﻿using HubFile.Data;
 using HubFile.FileUploadService;
+using HubFile.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HubFile.Controllers
 {
@@ -55,10 +50,7 @@ namespace HubFile.Controllers
         // GET: File/Create
         public async Task<IActionResult> Create(IFormFile file)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
+            ArgumentNullException.ThrowIfNull(file);
             var filePath = await _fileUploadService.UploadFileAsync(file);
 
             var fileModel = new FileModel

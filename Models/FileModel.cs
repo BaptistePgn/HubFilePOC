@@ -1,6 +1,4 @@
-﻿using System.Xml;
-
-namespace HubFile.Models
+﻿namespace HubFile.Models
 {
     public class FileModel
     {

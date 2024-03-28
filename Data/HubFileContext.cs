@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using HubFile.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace HubFile.Data
 {
     public class HubFileContext : DbContext
     {
-        public HubFileContext (DbContextOptions<HubFileContext> options)
+        public HubFileContext(DbContextOptions<HubFileContext> options)
             : base(options)
         {
         }

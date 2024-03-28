@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using HubFile.Data;
+﻿using HubFile.Data;
 using HubFile.FileUploadService;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<HubFileContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HubFileContext") ?? throw new InvalidOperationException("Connection string 'HubFileContext' not found.")));
