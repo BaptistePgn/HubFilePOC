@@ -7,6 +7,7 @@ namespace HubFile.Data
         public HubFileContext(DbContextOptions<HubFileContext> options)
             : base(options)
         {
+            Database.Migrate();
         }
 
         public DbSet<HubFile.Models.FileModel> FileModel { get; set; } = default!;
